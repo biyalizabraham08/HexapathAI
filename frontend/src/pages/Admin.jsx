@@ -61,7 +61,7 @@ export default function Admin() {
   const [users, setUsers] = useState([]);
   const [heatmap, setHeatmap] = useState({});
   const [alerts, setAlerts] = useState([]);
-  const [search, setSearch] = useState('');
+  // const [search, setSearch] = useState('');
   const [loading, setLoading] = useState(true);
   const [visibleCount, setVisibleCount] = useState(5);
 
@@ -95,10 +95,8 @@ export default function Admin() {
 
   useEffect(() => { loadData(); }, [loadData]);
 
-  const filtered = users.filter(u =>
-    u.full_name.toLowerCase().includes(search.toLowerCase()) ||
-    (u.department || '').toLowerCase().includes(search.toLowerCase())
-  );
+  // Search functionality removed
+
 
   const heatCategories = Object.keys(heatmap);
   const maxRows = heatCategories.length > 0 ? Math.max(...heatCategories.map(k => heatmap[k].length)) : 0;

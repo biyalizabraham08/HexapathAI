@@ -5,7 +5,7 @@ import useAuth from '../hooks/useAuth';
 const Home = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
-  const observerRef = useRef(null);
+  const observer = useRef(null);
 
   // Setup intersection observer for scroll reveal animations
   useEffect(() => {

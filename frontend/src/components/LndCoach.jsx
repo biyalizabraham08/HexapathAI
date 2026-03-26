@@ -14,7 +14,7 @@ const STAGES = {
 
 const LndCoach = () => {
   const { user } = useAuth();
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState([]);
   const [stage, setStage] = useState(1);
