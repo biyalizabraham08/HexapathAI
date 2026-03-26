@@ -1,0 +1,3 @@
+"""
+HEXAPATH AI Backend Application.
+"""

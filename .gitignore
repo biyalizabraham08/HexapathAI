@@ -1,0 +1,20 @@
+# Python virtual environment
+backend/venv/
+*.pyc
+__pycache__/
+
+# Node modules
+frontend/node_modules/
+
+# Local database
+backend/skill_gap.db
+
+# Sensitivity data
+backend/.env
+
+# Build artifacts
+frontend/build/
+
+# Logs
+backend/output.txt
+backend/error.txt
