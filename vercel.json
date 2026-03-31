@@ -18,10 +18,18 @@
       "src": "/api/(.*)",
       "dest": "/api/index.py"
     },
+    {
+      "src": "/(static/.*)",
+      "dest": "/frontend/build/$1"
+    },
+    {
+      "src": "/(.*\\.[a-zA-Z0-9]+)$",
+      "dest": "/frontend/build/$1"
+    },
     { "handle": "filesystem" },
     {
       "src": "/(.*)",
-      "dest": "/index.html"
+      "dest": "/frontend/build/index.html"
     }
   ]
 }
