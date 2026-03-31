@@ -9,7 +9,7 @@ class Settings(BaseSettings):
     SECRET_KEY: str = "supersecretkey"
     ALGORITHM: str = "HS256"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
-    DATABASE_URL: str = "sqlite:///./skill_gap.db"
+    DATABASE_URL: str = "sqlite:////tmp/skill_gap.db"
     OPENROUTER_API_KEY: Optional[str] = None
     SUPABASE_JWT_SECRET: str = "your_supabase_jwt_secret_change_me"
 
