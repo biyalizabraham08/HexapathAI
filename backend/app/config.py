@@ -1,6 +1,7 @@
 import os
 from pydantic_settings import BaseSettings
 from logging import getLogger
+from typing import Optional
 
 logger = getLogger(__name__)
 
@@ -9,7 +10,7 @@ class Settings(BaseSettings):
     ALGORITHM: str = "HS256"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
     DATABASE_URL: str = "sqlite:///./skill_gap.db"
-    OPENROUTER_API_KEY: str | None = None
+    OPENROUTER_API_KEY: Optional[str] = None
     SUPABASE_JWT_SECRET: str = "your_supabase_jwt_secret_change_me"
 
     class Config:

@@ -236,11 +236,13 @@ ROLE_ALIASES = {
 }
 
 
+from typing import Optional
+
 def _normalize(text: str) -> str:
     return text.strip().lower()
 
 
-def _find_role(desired_role: str) -> dict | None:
+def _find_role(desired_role: str) -> Optional[dict]:
     """Look up a role in the knowledge base (with alias support)."""
     key = _normalize(desired_role)
     if key in ROLE_SKILLS_DB:
