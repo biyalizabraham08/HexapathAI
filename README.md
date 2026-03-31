@@ -40,13 +40,13 @@ HexaPath AI is a real-time, AI-driven career navigation system designed for ente
 *(Replace placeholders with actual project screenshots)*
 
 > **Dashboard Overview**
-> `![Dashboard Screenshot](link-to-image)`
+> `![Dashboard Screenshot](assets/dashboard1.png)`
 
 > **AI Skill Gap Analyzer**
-> `![Analyzer Screenshot](link-to-image)`
+> `![Analyzer Screenshot](assets/analyzer.png)`
 
 > **Personalized Career Roadmap**
-> `![Roadmap Screenshot](link-to-image)`
+> `![Roadmap Screenshot](assets/roadmap.png)`
 
 ---
 
