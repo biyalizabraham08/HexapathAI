@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { fetchResource } from '../services/api';
 import useAuth from '../hooks/useAuth';
 import './AdminAuth.css';
 

@@ -1,11 +1,10 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import useAuth from '../hooks/useAuth';
 
 const Home = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
-  const observer = useRef(null);
 
   // Setup intersection observer for scroll reveal animations
   useEffect(() => {
