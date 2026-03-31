@@ -13,7 +13,7 @@ const ROLES = [
 const INDUSTRIES = ['Technology', 'Finance', 'Healthcare', 'E-commerce', 'Education', 'Media', 'Manufacturing'];
 
 const Analyzer = () => {
-  const { user, localId } = useAuth();
+  const { localId } = useAuth();
   const [currentSkills, setCurrentSkills] = useState('');
   const [desiredRole, setDesiredRole] = useState('');
   const [industry, setIndustry] = useState('Technology');
