@@ -1,6 +1,8 @@
-# 🚀 HexaPath AI
+<div align="center">
+  <img src="assets/favicon.png" alt="HexaPath AI Logo" width="120" />
+</div>
 
-**Real-time AI-powered TSR Career Navigation Platform**
+# 🚀 HexaPath AI**Real-time AI-powered TSR Career Navigation Platform**
 
 HexaPath AI is a real-time, AI-driven career navigation system designed for enterprise consultants. It empowers employees to clearly understand their current skill gaps, explore Technical Skill Requirement (TSR) roles, and generate hyper-personalized career roadmaps using cutting-edge AI. By bridging the gap between current proficiencies and future goals, HexaPath equips the modern workforce to upskill intelligently.
 
@@ -27,11 +29,22 @@ HexaPath AI is a real-time, AI-driven career navigation system designed for ente
 
 ## 🛠️ Tech Stack
 
-* **Frontend**: React (Vite), TailwindCSS, Chart.js
-* **Backend**: FastAPI (Python), SQLAlchemy
-* **Database & Auth**: Supabase (PostgreSQL), JWT
-* **AI Intelligence**: OpenRouter (Multi-Model Fallback: Mistral/Gemma)
-* **Deployment**: Vercel (Frontend), Render (Backend)
+**Frontend:**
+![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
+![Vite](https://img.shields.io/badge/vite-%23646CFF.svg?style=for-the-badge&logo=vite&logoColor=white)
+![TailwindCSS](https://img.shields.io/badge/tailwindcss-%2338B2AC.svg?style=for-the-badge&logo=tailwind-css&logoColor=white)
+
+**Backend:**
+![FastAPI](https://img.shields.io/badge/FastAPI-005571?style=for-the-badge&logo=fastapi)
+![Python](https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54)
+
+**Database, Auth & AI:**
+![Supabase](https://img.shields.io/badge/Supabase-3ECF8E?style=for-the-badge&logo=supabase&logoColor=white)
+![Mistral](https://img.shields.io/badge/Mistral_7B-100000?style=for-the-badge&logo=mistral&logoColor=white)
+
+**Deployment:**
+![Vercel](https://img.shields.io/badge/vercel-%23000000.svg?style=for-the-badge&logo=vercel&logoColor=white)
+![Render](https://img.shields.io/badge/Render-%46E3B7.svg?style=for-the-badge&logo=render&logoColor=white)
 
 ---
 
@@ -40,13 +53,41 @@ HexaPath AI is a real-time, AI-driven career navigation system designed for ente
 *(Replace placeholders with actual project screenshots)*
 
 > **Dashboard Overview**
-> `![Dashboard Screenshot](assets/dashboard1.png)`
+> ![Dashboard Screenshot](assets/dashboard1.png)
 
 > **AI Skill Gap Analyzer**
-> `![Analyzer Screenshot](assets/analyzer.png)`
+> ![Analyzer Screenshot](assets/analyzer.png)
 
 > **Personalized Career Roadmap**
-> `![Roadmap Screenshot](assets/roadmap.png)`
+> ![Roadmap Screenshot](assets/roadmap.png)
+
+---
+
+## 🗂️ Project Structure
+
+```text
+HexapathAI/
+├── assets/                  # Documentation images and screenshots
+├── backend/                 # Python FastAPI Server
+│   ├── app/                 # Application codebase
+│   │   ├── agents/          # OpenRouter AI Integrations
+│   │   ├── api/             # API Endpoints (FastAPI Routers)
+│   │   ├── core/            # Configs, Security, and JWT
+│   │   ├── db/              # SQLAlchemy Database Setup
+│   │   └── schemas/         # Pydantic Data Models
+│   ├── requirements.txt     # Python Dependencies
+│   └── .env                 # Backend Secrets
+├── frontend/                # React UI Application
+│   ├── public/              # Static Frontend Assets
+│   ├── src/                 # Application codebase
+│   │   ├── components/      # Reusable React UI Components
+│   │   ├── context/         # React Context (Auth State)
+│   │   ├── pages/           # Application Views/Routes
+│   │   └── services/        # API and Supabase Client
+│   ├── package.json         # Node Dependencies
+│   └── .env                 # Frontend Secrets
+└── README.md                # You are here!
+```
 
 ---
 
