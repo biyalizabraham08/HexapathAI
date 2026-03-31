@@ -1,9 +1,7 @@
 import json
 import logging
 import random
-import urllib.request
-import urllib.error
-from ..config import settings
+from ..utils.ai_provider import ai_client
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -201,72 +199,48 @@ def _get_offline_questions(skills: list, num_total: int) -> list:
 
 
 class AssessmentAgent:
-    def __init__(self):
-        self.model_candidates = [
-            "gemini-2.0-flash",
-            "gemini-pro-latest",
-            "gemini-flash-latest",
-        ]
-
     def get_questions(self, skills: list, num_total: int = 20, difficulty: str = "Mixed") -> list:
         """
-        Tries to generate questions via Gemini API.
-        Falls back to a comprehensive offline question bank on failure.
+        Generates questions via OpenRouter (Mistral 7B).
+        Falls back to an offline question bank if the API is unavailable.
         """
-        api_key = settings.GEMINI_API_KEY
-        if api_key:
-            api_key = api_key.strip()
-            questions = self._try_api(api_key, skills, num_total, difficulty)
-            if questions:
-                return questions
-
-        logger.warning("⚠️ API unavailable. Using offline question bank.")
+        questions = self._try_api(skills, num_total, difficulty)
+        if questions:
+            return questions
+        logger.warning("⚠️ OpenRouter unavailable. Using offline question bank.")
         return _get_offline_questions(skills, num_total)
 
-    def _try_api(self, api_key: str, skills: list, num_total: int, difficulty: str = "Mixed"):
-        """Attempts Gemini API and returns questions or None."""
-        prompt = f"""
-        Generate EXACTLY {num_total} technical multiple-choice questions for the following skills: {', '.join(skills)}.
-        The difficulty level for ALL questions MUST BE strictly tailored to a '{difficulty}' level professional.
+    def _try_api(self, skills: list, num_total: int, difficulty: str = "Mixed"):
+        """Attempts OpenRouter Mistral 7B and returns questions or None."""
+        prompt = f"""Generate EXACTLY {num_total} technical multiple-choice questions for these skills: {', '.join(skills)}.
+        Difficulty: '{difficulty}' level professional.
+        Return ONLY a JSON array, no markdown, no extra text. Match this schema exactly:
+        [{{"skill": "Skill Name", "question": "Question text", "options": ["A", "B", "C", "D"], "correct_answer": 0, "explanation": "Why correct", "difficulty": "{difficulty}", "reference_query": "search query"}}]
+        correct_answer MUST be an integer 0-3. Return EXACTLY {num_total} items."""
         
-        Return a JSON array only, and perfectly match this schema for each object:
-        [{{
-            "skill": "The specific skill being tested",
-            "question": "The question text or code snippet",
-            "options": ["Option A", "Option B", "Option C", "Option D"],
-            "correct_answer": 0,
-            "explanation": "Why this answer is correct",
-            "difficulty": "{difficulty}",
-            "reference_query": "3-5 word technical search query related to this topic"
-        }}]
-        Return ONLY valid JSON array with EXACTLY {num_total} elements. correct_answer MUST be an integer 0-3.
-        """
-        payload_bytes = json.dumps({"contents": [{"parts": [{"text": prompt}]}]}).encode('utf-8')
-
-        for model_id in self.model_candidates:
-            url = f"https://generativelanguage.googleapis.com/v1/models/{model_id}:generateContent?key={api_key}"
-            try:
-                req = urllib.request.Request(url, data=payload_bytes, headers={'Content-Type': 'application/json'})
-                with urllib.request.urlopen(req, timeout=40) as resp:
-                    body = json.loads(resp.read().decode())
-                    text = body['candidates'][0]['content']['parts'][0]['text'].strip()
-                    if "```json" in text:
-                        text = text.split("```json")[1].split("```")[0].strip()
-                    elif "```" in text:
-                        text = text.split("```")[1].split("```")[0].strip()
-                    questions = json.loads(text)
-                    if isinstance(questions, list) and len(questions) > 0:
-                        logger.info(f"✅ Generated {len(questions)} questions via API ({model_id}) at {difficulty} difficulty")
-                        # Sanitize corect_answer
-                        for q in questions:
-                            if isinstance(q.get('correct_answer'), str) and q['correct_answer'].isdigit():
-                                q['correct_answer'] = int(q['correct_answer'])
-                            elif isinstance(q.get('correct_answer'), str) and q['correct_answer'] in q.get('options', []):
-                                q['correct_answer'] = q['options'].index(q['correct_answer'])
-                        return questions
-            except Exception as e:
-                logger.warning(f"⚠️ Model {model_id} failed: {str(e)[:80]}")
-                continue
+        system = "You are a strict technical interviewer. Output only valid JSON arrays."
+        print(f"🚀 [OPENROUTER] Generating {num_total} quiz questions for {skills}...")
+        
+        raw = ai_client.generate(prompt, system_instruction=system)
+        
+        try:
+            clean = raw.strip()
+            if '```json' in clean:
+                clean = clean.split('```json')[1].split('```')[0].strip()
+            elif '```' in clean:
+                clean = clean.split('```')[1].split('```')[0].strip()
+            
+            questions = json.loads(clean)
+            if isinstance(questions, list) and len(questions) > 0:
+                logger.info(f"✅ Generated {len(questions)} questions via OpenRouter")
+                for q in questions:
+                    if isinstance(q.get('correct_answer'), str) and q['correct_answer'].isdigit():
+                        q['correct_answer'] = int(q['correct_answer'])
+                    elif isinstance(q.get('correct_answer'), str) and q['correct_answer'] in q.get('options', []):
+                        q['correct_answer'] = q['options'].index(q['correct_answer'])
+                return questions
+        except Exception as e:
+            logger.warning(f"⚠️ OpenRouter question parsing failed: {str(e)[:80]}")
         return None
 
     def _get_fallback_questions(self, skills: list, num_total: int) -> list:

@@ -5,7 +5,7 @@ import useAuth from '../hooks/useAuth';
 import { useCourseProgress } from '../context/CourseProgressContext';
 
 const Learner = () => {
-  const { user } = useAuth();
+  const { user, localId } = useAuth();
   const navigate = useNavigate();
   const {
     courses: trackedCourses,
@@ -26,10 +26,11 @@ const Learner = () => {
   const [activeSlide, setActiveSlide] = useState('overview');
 
   useEffect(() => {
-    const storedUser = JSON.parse(localStorage.getItem('user') || '{}');
-    const userId = storedUser.id || user?.id;
-    if (userId) fetchTrackerData(userId);
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+    // Priority 1: localId from Context
+    // Priority 2: localId from localStorage (backup)
+    const effectiveId = localId || localStorage.getItem('skill_gap_local_id');
+    if (effectiveId) fetchTrackerData(effectiveId);
+  }, [localId]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const fetchTrackerData = async (userId) => {
     setLoading(true);
@@ -101,7 +102,7 @@ const Learner = () => {
   return (
     <div className="landing-page">
       <div className="page-header" style={{ marginBottom: '20px' }}>
-        <h2>Welcome back, {user?.full_name || 'Learner'} 👋</h2>
+        <h2>Welcome back, {user?.user_metadata?.full_name || user?.email?.split('@')[0] || 'Learner'} 👋</h2>
         <p>Here's your skill development overview powered by Tracker AI</p>
       </div>
 

@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+import emailjs from '@emailjs/browser';
+import { supabase } from '../supabaseClient';
 import { fetchResource } from '../services/api';
 import useAuth from '../hooks/useAuth';
 
@@ -15,7 +17,7 @@ const Register = () => {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const { login } = useAuth();
+  const { login } = useAuth(); // Use login after successful OTP
   const navigate = useNavigate();
 
   const handleChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -43,24 +45,45 @@ const Register = () => {
     setError('');
     
     try {
-      const res = await fetchResource('/auth/register', {
+      // 1. Tell backend to generate OTP and store pending user
+      const response = await fetchResource('/auth/register', {
         method: 'POST',
         body: JSON.stringify({
-          full_name: formData.full_name, email: formData.email,
-          password: formData.password, department: formData.department,
-          experience_level: formData.experience_level, skills: formData.skills
-        })
+          full_name: formData.full_name,
+          email: formData.email,
+          password: formData.password,
+          department: formData.department,
+          experience_level: formData.experience_level,
+          skills: formData.skills
+        }),
       });
       
-      if (res.require_otp) {
-        if (res.dev_otp) {
-          console.log(
-            `\n%c🔑 VERIFICATION OTP: ${res.dev_otp}\n`, 
-            "background: #1e1e2f; color: #4ade80; font-size: 16px; font-weight: bold; padding: 10px; border-radius: 8px;"
-          );
-        }
-        setStep(2); // Move to OTP step
+      const otpCode = response.otp_code;
+      
+      // Deliver OTP via EmailJS
+      const serviceId = process.env.REACT_APP_EMAILJS_SERVICE_ID;
+      const templateId = process.env.REACT_APP_EMAILJS_TEMPLATE_ID;
+      const publicKey = process.env.REACT_APP_EMAILJS_PUBLIC_KEY;
+
+      const expiryTime = new Date(Date.now() + 10 * 60000).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+      try {
+        await emailjs.send(serviceId, templateId, {
+          email: formData.email,
+          passcode: otpCode,
+          time: expiryTime
+        }, publicKey);
+        
+        console.log('✅ Email successfully sent via EmailJS');
+      } catch (emailErr) {
+        console.error('❌ EmailJS Delivery Failed:', emailErr);
+        // If EmailJS fails, we'll alert the user but keep the code in console for development
+        setError(`Email Delivery Failed: ${emailErr.text || 'Check your EmailJS configuration'}`);
+        console.warn('Fallback OTP for development:', otpCode);
+        return; // Don't proceed to step 2 if email failed
       }
+      
+      setStep(2);
     } catch (err) {
       setError(err.message || 'Registration failed. Email might already be in use.');
     } finally {
@@ -76,22 +99,30 @@ const Register = () => {
     setLoading(true);
     setError('');
     try {
-      // 1. Verify OTP and Create User
+      // 1. Verify OTP with backend (Backend creates the user profile on success)
       await fetchResource('/auth/verify-otp', {
         method: 'POST',
-        body: JSON.stringify({ email: formData.email, otp_code: otp })
+        body: JSON.stringify({
+          email: formData.email,
+          otp_code: otp
+        })
       });
       
-      // 2. Auto-login upon successful verification
-      const loginRes = await fetchResource('/auth/login', {
-        method: 'POST',
-        body: JSON.stringify({ email: formData.email, password: formData.password })
-      });
-      
-      login(loginRes.user, loginRes.access_token);
+      // 2. Login the user (since they're already validated in local DB)
+      // Note: We also call supabase.signUp in the background or backend to sync auth
+      try {
+        await supabase.auth.signUp({
+          email: formData.email,
+          password: formData.password
+        });
+      } catch (sbErr) {
+        // Ignored if user already exists or auto-confirm is off
+      }
+
+      await login(formData.email, formData.password);
       navigate('/app/learner');
     } catch (err) {
-      setError(err.message || 'Invalid or expired OTP. Please try again.');
+      setError(err.message || 'Invalid or expired code. Please try again.');
     } finally {
       setLoading(false);
     }

@@ -13,7 +13,7 @@ const ROLES = [
 const INDUSTRIES = ['Technology', 'Finance', 'Healthcare', 'E-commerce', 'Education', 'Media', 'Manufacturing'];
 
 const Analyzer = () => {
-  const { user } = useAuth();
+  const { user, localId } = useAuth();
   const [currentSkills, setCurrentSkills] = useState('');
   const [desiredRole, setDesiredRole] = useState('');
   const [industry, setIndustry] = useState('Technology');
@@ -37,10 +37,10 @@ const Analyzer = () => {
           experience_level: experienceLevel,
         })
       });
-      setAnalysis(response.data);
+      setAnalysis(response); // Fix mapping: response from api.js already returns the json
 
       // Auto-save analysis to tracker DB
-      const userId = JSON.parse(localStorage.getItem('user') || '{}').id;
+      const userId = localId || localStorage.getItem('skill_gap_local_id');
       if (userId) {
         fetchResource('/tracking/save-analysis', {
           method: 'POST',
@@ -120,54 +120,71 @@ const Analyzer = () => {
       {error && <div className="error-msg mb-24">{error}</div>}
 
       {/* Results */}
-      {analysis && (
+      {analysis && analysis.data && (
         <div className="results-section">
           {/* Summary Stats */}
           <div className="grid-4 mb-24">
             <div className="stat-card" style={{ animationDelay: '0s' }}>
               <div className="fit-gauge">
-                <div className="gauge-value">{analysis.analysis.career_fit_pct}%</div>
+                <div className="gauge-value">{analysis.data.analysis.career_fit_pct}%</div>
                 <div className="gauge-label">Career Fit</div>
               </div>
             </div>
             <div className="stat-card" style={{ animationDelay: '0.1s' }}>
-              <span className="stat-value">{analysis.analysis.total_hard_gaps}</span>
+              <span className="stat-value">{analysis.data.analysis.total_hard_gaps}</span>
               <span className="stat-label">Hard Skill Gaps</span>
             </div>
             <div className="stat-card" style={{ animationDelay: '0.2s' }}>
-              <span className="stat-value">{analysis.analysis.total_soft_gaps}</span>
+              <span className="stat-value">{analysis.data.analysis.total_soft_gaps}</span>
               <span className="stat-label">Soft Skill Gaps</span>
             </div>
             <div className="stat-card" style={{ animationDelay: '0.3s' }}>
-              <span className="stat-value">{analysis.summary.total_resources}</span>
+              <span className="stat-value">{analysis.data.summary.total_resources}</span>
               <span className="stat-label">Recommended Resources</span>
             </div>
           </div>
+
+          {/* Strategic AI Insight - THE PROOF OF GEMINI */}
+          {analysis.data.ai_insight && (
+            <div className="glass-card mb-24" style={{ borderLeft: '4px solid #4285F4', background: 'rgba(66, 133, 244, 0.05)' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
+                <h3 style={{ margin: 0, fontSize: '18px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  ✨ Strategic AI Insight
+                </h3>
+                <span style={{ fontSize: '10px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1px', background: 'linear-gradient(90deg, #4285F4, #9B72F3)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
+                  Powered by {analysis.data.powered_by || 'Gemini 1.5 Flash'}
+                </span>
+              </div>
+              <p style={{ margin: 0, fontSize: '15px', lineHeight: '1.6', color: 'var(--text-primary)', fontStyle: 'italic' }}>
+                "{analysis.data.ai_insight}"
+              </p>
+            </div>
+          )}
 
           {/* Career Fit & Role Info */}
           <div className="glass-card mb-24">
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '16px' }}>
               <div>
                 <h3 style={{ margin: '0 0 4px', fontSize: '18px' }}>
-                  Target: {analysis.analysis.resolved_role}
+                  Target: {analysis.data.analysis.resolved_role}
                 </h3>
                 <p style={{ margin: 0, color: 'var(--text-secondary)', fontSize: '14px' }}>
-                  {analysis.analysis.industry_context} • {analysis.analysis.experience_level}
+                  {analysis.data.analysis.industry_context} • {analysis.data.analysis.experience_level}
                 </p>
               </div>
               <div>
-                <span className={`badge badge-${analysis.analysis.career_fit_pct >= 60 ? 'low' : analysis.analysis.career_fit_pct >= 40 ? 'medium' : 'high'}`} style={{ fontSize: '14px', padding: '6px 16px' }}>
-                  {analysis.analysis.career_fit}
+                <span className={`badge badge-${analysis.data.analysis.career_fit_pct >= 60 ? 'low' : analysis.data.analysis.career_fit_pct >= 40 ? 'medium' : 'high'}`} style={{ fontSize: '14px', padding: '6px 16px' }}>
+                  {analysis.data.analysis.career_fit}
                 </span>
               </div>
             </div>
 
             {/* Matched Skills */}
-            {(analysis.analysis.hard_matches?.length > 0 || analysis.analysis.soft_matches?.length > 0) && (
+            {(analysis.data.analysis.hard_matches?.length > 0 || analysis.data.analysis.soft_matches?.length > 0) && (
               <div style={{ marginTop: '16px' }}>
                 <p style={{ fontSize: '13px', color: 'var(--text-secondary)', marginBottom: '8px', fontWeight: 500 }}>✅ SKILLS YOU ALREADY HAVE</p>
                 <div className="matched-skills">
-                  {[...(analysis.analysis.hard_matches || []), ...(analysis.analysis.soft_matches || [])].map(s => (
+                  {[...(analysis.data.analysis.hard_matches || []), ...(analysis.data.analysis.soft_matches || [])].map(s => (
                     <span key={s} className="badge badge-low">{s}</span>
                   ))}
                 </div>
@@ -176,11 +193,11 @@ const Analyzer = () => {
           </div>
 
           {/* Hard Skill Gaps */}
-          {analysis.analysis.hard_gaps.length > 0 && (
+          {analysis.data.analysis.hard_gaps.length > 0 && (
             <div style={{ marginBottom: '32px' }}>
               <h3 style={{ marginBottom: '16px', fontSize: '18px' }}>🔧 Hard Skill Gaps</h3>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                {analysis.analysis.hard_gaps.map((gap, i) => (
+                {analysis.data.analysis.hard_gaps.map((gap, i) => (
                   <div key={i} className="gap-card" style={{ animationDelay: `${i * 0.05}s` }}>
                     <div className="gap-info">
                       <div className="gap-skill">{gap.skill}</div>
@@ -201,11 +218,11 @@ const Analyzer = () => {
           )}
 
           {/* Soft Skill Gaps */}
-          {analysis.analysis.soft_gaps.length > 0 && (
+          {analysis.data.analysis.soft_gaps.length > 0 && (
             <div style={{ marginBottom: '32px' }}>
               <h3 style={{ marginBottom: '16px', fontSize: '18px' }}>💡 Soft Skill Gaps</h3>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                {analysis.analysis.soft_gaps.map((gap, i) => (
+                {analysis.data.analysis.soft_gaps.map((gap, i) => (
                   <div key={i} className="gap-card" style={{ animationDelay: `${i * 0.05}s` }}>
                     <div className="gap-info">
                       <div className="gap-skill">{gap.skill}</div>
@@ -224,7 +241,7 @@ const Analyzer = () => {
           <div style={{ marginBottom: '32px' }}>
             <h3 style={{ marginBottom: '16px', fontSize: '18px' }}>📚 Personalized Learning Path</h3>
             <div className="grid-2">
-              {analysis.learning_path.map((item, i) => (
+              {analysis.data.learning_path.map((item, i) => (
                 <div key={i} className="resource-card" style={{ animationDelay: `${i * 0.03}s` }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '8px', marginBottom: '8px' }}>
                     <span className="resource-title">{item.recommendation}</span>

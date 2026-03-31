@@ -63,9 +63,9 @@ const MainLayout = () => {
           </span>
           <div className="top-bar-user">
             <span style={{ fontSize: '14px', color: 'var(--text-secondary)' }}>
-              {user?.full_name || 'User'}
+              {user?.user_metadata?.full_name || user?.email?.split('@')[0] || 'User'}
             </span>
-            <div className="avatar">{getInitials(user?.full_name)}</div>
+            <div className="avatar">{getInitials(user?.user_metadata?.full_name || user?.email?.split('@')[0])}</div>
           </div>
         </header>
         <div className="page-content">

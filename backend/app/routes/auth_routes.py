@@ -61,7 +61,12 @@ def register(user_in: UserCreate, db: Session = Depends(get_db)):
         db.commit()
         raise HTTPException(status_code=500, detail="Failed to send verification email. Please try again.")
 
-    return {"status": "success", "message": "OTP sent to email", "require_otp": True, "dev_otp": otp_code}
+    return {
+        "status": "success", 
+        "message": "OTP generated", 
+        "otp_code": otp_code, 
+        "email": user_in.email
+    }
 
 @router.post("/verify-otp", response_model=UserResponse)
 def verify_otp(request: VerifyOTPRequest, db: Session = Depends(get_db)):

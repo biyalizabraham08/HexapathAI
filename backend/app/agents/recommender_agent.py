@@ -1,8 +1,7 @@
-"""
-Recommender Agent — Real course/resource recommendation engine.
-Maps skill gaps to actual courses, books, podcasts, and projects
-from real platforms with estimated durations and difficulty levels.
-"""
+import logging
+from ..utils.ai_provider import ai_client
+
+logger = logging.getLogger(__name__)
 
 COURSE_DATABASE = {
     # ── Programming Languages ────────────────
@@ -260,8 +259,21 @@ def _normalize(text: str) -> str:
 
 
 class RecommenderAgent:
-    def __init__(self):
-        pass
+    def _get_ai_insight(self, hard_gaps, soft_gaps, role, experience):
+        """Calls OpenRouter Mistral 7B to get a unique strategic insight."""
+        hard_skills = ', '.join([g['skill'] for g in hard_gaps[:3]]) or 'None'
+        soft_skills = ', '.join([g['skill'] for g in soft_gaps[:2]]) or 'None'
+        
+        prompt = f"""Act as a Career Coach. A user wants to become a {role} (Experience: {experience}).
+        Key skill gaps: {hard_skills} (Hard Skills) and {soft_skills} (Soft Skills).
+        Give a 2-3 sentence 'Strategic Insight' on why these skills matter in 2025 and one punchy tip to accelerate growth.
+        Be professional, encouraging, and specific. Plain text only, no markdown."""
+        
+        system = "You are a professional career strategist. Be concise, specific, and motivating."
+        print(f"🚀 [OPENROUTER] Generating career insight for {role}...")
+        return ai_client.generate(prompt, system_instruction=system)
+
+
 
     def generate_learning_path(
         self, hard_gaps: list, soft_gaps: list, experience_level: str = "Intermediate"
@@ -357,7 +369,14 @@ class RecommenderAgent:
                 })
             priority += 1
 
-        return path
+        # ── Get Live AI Insight ──
+        ai_insight = self._get_ai_insight(hard_gaps, soft_gaps, "Target Role", experience_level)
+
+        return {
+            "path": path,
+            "ai_insight": ai_insight,
+            "powered_by": "Mistral 7B via OpenRouter"
+        }
 
 
 recommender_agent = RecommenderAgent()

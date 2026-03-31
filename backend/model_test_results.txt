@@ -1,0 +1,8 @@
+SUCCESS with google/gemma-3-27b-it:free: AI IS WORKING
+FAILED meta-llama/llama-3.3-70b-instruct:free: HTTP Error 429: Too Many Requests
+FAILED openai/gpt-oss-120b:free: HTTP Error 404: Not Found
+FAILED nvidia/nemotron-3-super-120b-a12b:free: 'NoneType' object has no attribute 'strip'
+FAILED qwen/qwen3-coder:free: HTTP Error 429: Too Many Requests
+FAILED openai/gpt-oss-20b:free: HTTP Error 404: Not Found
+SUCCESS with qwen/qwen3.6-plus-preview:free: AI IS WORKING
+SUCCESS with liquid/lfm-2.5-1.2b-instruct:free: AI IS WORKING

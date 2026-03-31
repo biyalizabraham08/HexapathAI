@@ -17,12 +17,17 @@ const AdminLogin = () => {
     setLoading(true);
     setError('');
     try {
-      const res = await fetchResource('/admin/login', {
-        method: 'POST',
-        body: JSON.stringify({ email, password }),
-      });
-      login(res.user, res.access_token);
-      navigate('/admin');
+      const { user } = await login(email, password);
+      
+      // Verification: Check if the user has the admin role in their Supabase metadata
+      const role = user.user_metadata?.role;
+      if (role === 'admin') {
+        navigate('/admin');
+      } else {
+        setError('Access denied: You do not have administrator privileges.');
+        // Optionally sign out the user if they're not an admin but tried to login here
+        // await logout(); 
+      }
     } catch (err) {
       setError(err.message || 'Invalid admin credentials');
     } finally {

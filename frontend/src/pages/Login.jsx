@@ -17,14 +17,12 @@ const Login = () => {
     setLoading(true);
     setError('');
     try {
-      const response = await fetchResource('/auth/login', {
-        method: 'POST',
-        body: JSON.stringify({ email, password })
-      });
-      login(response.user, response.access_token);
-      navigate(response.user.role === 'admin' ? '/admin' : '/app/learner');
+      const data = await login(email, password);
+      // Determine navigation based on user role (stored in app_metadata or user_metadata)
+      const role = data.user.user_metadata?.role || 'learner';
+      navigate(role === 'admin' ? '/admin' : '/app/learner');
     } catch (err) {
-      setError('Invalid email or password. Please try again.');
+      setError(err.message || 'Invalid email or password. Please try again.');
     } finally {
       setLoading(false);
     }

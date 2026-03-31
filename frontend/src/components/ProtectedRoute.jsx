@@ -10,9 +10,11 @@ const ProtectedRoute = ({ children, requiredRole }) => {
     return <Navigate to={requiredRole === 'admin' ? '/admin/login' : '/login'} replace />;
   }
 
-  if (requiredRole && user.role !== requiredRole) {
+  const role = user.user_metadata?.role || 'learner';
+
+  if (requiredRole && role !== requiredRole) {
     // Wrong role – redirect to their correct home
-    return <Navigate to={user.role === 'admin' ? '/admin' : '/app/learner'} replace />;
+    return <Navigate to={role === 'admin' ? '/admin' : '/app/learner'} replace />;
   }
 
   return children;

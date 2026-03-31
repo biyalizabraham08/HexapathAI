@@ -9,7 +9,8 @@ class Settings(BaseSettings):
     ALGORITHM: str = "HS256"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
     DATABASE_URL: str = "sqlite:///./skill_gap.db"
-    GEMINI_API_KEY: str | None = None
+    OPENROUTER_API_KEY: str | None = None
+    SUPABASE_JWT_SECRET: str = "your_supabase_jwt_secret_change_me"
 
     class Config:
         # Load .env from the backend root (one level up from app/config.py)
@@ -17,7 +18,7 @@ class Settings(BaseSettings):
         extra = "ignore"
 
 settings = Settings()
-if settings.GEMINI_API_KEY:
-    logger.info("✅ GEMINI_API_KEY loaded successfully from .env")
+if settings.OPENROUTER_API_KEY:
+    logger.info("✅ OPENROUTER_API_KEY loaded successfully from .env")
 else:
-    logger.warning("🚨 GEMINI_API_KEY NOT found in .env")
+    logger.warning("🚨 OPENROUTER_API_KEY NOT found in .env")

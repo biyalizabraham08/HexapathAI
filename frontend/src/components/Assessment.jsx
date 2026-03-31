@@ -5,7 +5,7 @@ import useAuth from '../hooks/useAuth';
 
 const Assessment = () => {
   const navigate = useNavigate();
-  const { user } = useAuth();
+  const { user, localId } = useAuth();
 
   // Stages: 'setup' -> 'quiz' -> 'result'
   const [stage, setStage] = useState('setup');
@@ -41,14 +41,7 @@ const Assessment = () => {
   const [loading, setLoading] = useState(false);
   const [submitting, setSubmitting] = useState(false);
 
-  const userSkills = (() => {
-    try {
-      const stored = JSON.parse(localStorage.getItem('user') || '{}');
-      return stored.skills || user?.skills || [];
-    } catch {
-      return [];
-    }
-  })();
+  const userSkills = user?.user_metadata?.skills || [];
 
   const startTimer = () => {
     setTimeTaken(0);
@@ -110,12 +103,12 @@ const Assessment = () => {
     setLoading(true);
     try {
       const skillsToTest = userSkills.length > 0 ? userSkills : ['Python', 'SQL'];
-      const storedUser = JSON.parse(localStorage.getItem('user') || '{}');
+      const userId = localId || localStorage.getItem('skill_gap_local_id');
       
       const res = await fetchResource('/assessments/adaptive/start', {
         method: 'POST',
         body: JSON.stringify({
-          user_id: storedUser.id || 1,
+          user_id: userId || 1,
           domain: 'Technology',
           role: 'Software Engineer',
           skills: skillsToTest
@@ -282,7 +275,7 @@ const Assessment = () => {
       per_skill: perSkill,
     };
 
-    const userId = JSON.parse(localStorage.getItem('user') || '{}').id;
+    const userId = localId || localStorage.getItem('skill_gap_local_id');
     if (userId) {
       await fetchResource('/tracking/save-assessment', {
         method: 'POST',

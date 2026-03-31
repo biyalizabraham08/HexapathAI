@@ -28,13 +28,21 @@ class RecommendationService:
             1 for g in profile_analysis["hard_gaps"] if g.get("severity") == "Critical"
         )
 
+        # 3. Summary statistics
+        total_gaps = profile_analysis["total_hard_gaps"] + profile_analysis["total_soft_gaps"]
+        critical_gaps = sum(
+            1 for g in profile_analysis["hard_gaps"] if g.get("severity") == "Critical"
+        )
+
         return {
             "analysis": profile_analysis,
-            "learning_path": learning_path,
+            "learning_path": learning_path["path"], # Just return the list here for compatibility
+            "ai_insight": learning_path.get("ai_insight"),
+            "powered_by": learning_path.get("powered_by"),
             "summary": {
                 "total_gaps": total_gaps,
                 "critical_gaps": critical_gaps,
-                "total_resources": len(learning_path),
+                "total_resources": len(learning_path["path"]),
                 "career_fit_pct": profile_analysis["career_fit_pct"],
             },
         }

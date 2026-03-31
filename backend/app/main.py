@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from .routes import auth_routes, user_routes, assessment_routes, learning_routes, admin_routes, tracking_routes, support_routes
+from .routes import auth_routes, user_routes, assessment_routes, learning_routes, admin_routes, tracking_routes, support_routes, path_routes
 from .db.database import engine, Base
 from .models import *  # noqa: F401,F403 — ensure all models register with Base
 
@@ -24,6 +24,7 @@ app.include_router(learning_routes.router, prefix="/api/learning", tags=["Learni
 app.include_router(admin_routes.router, prefix="/api/admin", tags=["Admin"])
 app.include_router(tracking_routes.router, prefix="/api/tracking", tags=["Tracking"])
 app.include_router(support_routes.router, prefix="/api/support", tags=["Support"])
+app.include_router(path_routes.router, prefix="/api/path", tags=["Career Path"])
 
 @app.get("/")
 def read_root():

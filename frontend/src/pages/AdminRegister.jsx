@@ -8,21 +8,28 @@ const AdminRegister = () => {
   const [form, setForm] = useState({ full_name: '', email: '', password: '', admin_secret: '' });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const { login } = useAuth();
+  const { register } = useAuth();
   const navigate = useNavigate();
 
   const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
+
+  const ADMIN_SECRET = "skillgap-admin-2024";
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     setError('');
+    
+    if (form.admin_secret !== ADMIN_SECRET) {
+      setLoading(false);
+      return setError("Invalid admin secret key. Access denied.");
+    }
+
     try {
-      const res = await fetchResource('/admin/register', {
-        method: 'POST',
-        body: JSON.stringify(form),
+      await register(form.email, form.password, { 
+        full_name: form.full_name, 
+        role: 'admin' 
       });
-      login(res.user, res.access_token);
       navigate('/admin');
     } catch (err) {
       setError(err.message || 'Registration failed');
