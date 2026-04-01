@@ -37,23 +37,23 @@ HexaPath AI is a real-time, AI-driven career navigation system designed for ente
 
 ## 🛠️ Tech Stack
 
-### 🎨 Frontend
+**Frontend**
 ![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
 ![Vite](https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=vite&logoColor=white)
 ![TailwindCSS](https://img.shields.io/badge/TailwindCSS-0EA5E9?style=for-the-badge&logo=tailwind-css&logoColor=white)
 
-### ⚙️ Backend
+**Backend**
 ![FastAPI](https://img.shields.io/badge/FastAPI-009688?style=for-the-badge&logo=fastapi&logoColor=white)
 ![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white)
 
-### 🗄️ Database & Auth
+**Database & Auth**
 ![Supabase](https://img.shields.io/badge/Supabase-3ECF8E?style=for-the-badge&logo=supabase&logoColor=white)
 
-### 🤖 AI
+**AI**
 ![OpenRouter](https://img.shields.io/badge/OpenRouter-AI-black?style=for-the-badge)
 ![Mistral 7B](https://img.shields.io/badge/Mistral-7B-orange?style=for-the-badge)
 
-### 🚀 Deployment
+**Deployment**
 ![Vercel](https://img.shields.io/badge/Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white)
 ![Render](https://img.shields.io/badge/Render-46E3B7?style=for-the-badge&logo=render&logoColor=black)
 ---
