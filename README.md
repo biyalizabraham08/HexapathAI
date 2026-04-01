@@ -37,25 +37,25 @@ HexaPath AI is a real-time, AI-driven career navigation system designed for ente
 
 ## 🛠️ Tech Stack
 
-**Frontend:**
+### 🎨 Frontend
 ![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
-![Vite](https://img.shields.io/badge/vite-%23646CFF.svg?style=for-the-badge&logo=vite&logoColor=white)
-![TailwindCSS](https://img.shields.io/badge/tailwindcss-%2338B2AC.svg?style=for-the-badge&logo=tailwind-css&logoColor=white)
+![Vite](https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=vite&logoColor=white)
+![TailwindCSS](https://img.shields.io/badge/TailwindCSS-0EA5E9?style=for-the-badge&logo=tailwind-css&logoColor=white)
 
-**Backend:**
-![FastAPI](https://img.shields.io/badge/FastAPI-005571?style=for-the-badge&logo=fastapi)
-![Python](https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54)
+### ⚙️ Backend
+![FastAPI](https://img.shields.io/badge/FastAPI-009688?style=for-the-badge&logo=fastapi&logoColor=white)
+![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white)
 
-**Database &Auth:**
+### 🗄️ Database & Auth
 ![Supabase](https://img.shields.io/badge/Supabase-3ECF8E?style=for-the-badge&logo=supabase&logoColor=white)
 
-**AI:**
-![Mistral](https://img.shields.io/badge/Mistral_7B-100000?style=for-the-badge&logo=mistral&logoColor=white)
+### 🤖 AI
+![OpenRouter](https://img.shields.io/badge/OpenRouter-AI-black?style=for-the-badge)
+![Mistral 7B](https://img.shields.io/badge/Mistral-7B-orange?style=for-the-badge)
 
-**Deployment:**
->**- Frontend:**![Vercel](https://img.shields.io/badge/vercel-%23000000.svg?style=for-the-badge&logo=vercel&logoColor=white)
->**- Backend:**![Render](https://img.shields.io/badge/Render-%46E3B7.svg?style=for-the-badge&logo=render&logoColor=white)
-
+### 🚀 Deployment
+![Vercel](https://img.shields.io/badge/Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white)
+![Render](https://img.shields.io/badge/Render-46E3B7?style=for-the-badge&logo=render&logoColor=black)
 ---
 
 ## 📸 Screenshots
@@ -108,7 +108,7 @@ HexapathAI/
 
 ### 1. Clone the Repository
 ```bash
-git clone https://github.com/your-username/HexapathAI.git
+git clone https://github.com/biyalizabraham08/HexapathAI.git
 cd HexapathAI
 ```
 
