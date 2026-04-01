@@ -2,9 +2,16 @@
   <img src="assets/favicon.png" alt="HexaPath AI Logo" width="120" />
 </div>
 
-# 🚀 HexaPath AI**Real-time AI-powered TSR Career Navigation Platform**
+#  HexaPath AI**Real-time AI-powered TSR Career Navigation Platform**
 
 HexaPath AI is a real-time, AI-driven career navigation system designed for enterprise consultants. It empowers employees to clearly understand their current skill gaps, explore Technical Skill Requirement (TSR) roles, and generate hyper-personalized career roadmaps using cutting-edge AI. By bridging the gap between current proficiencies and future goals, HexaPath equips the modern workforce to upskill intelligently.
+
+---
+## 🔗 Live Demo
+👉 https://hexapath-ai-7idb.vercel.app
+
+## 💻 GitHub Repository
+👉 https://github.com/biyalizabraham08/HexapathAI
 
 ---
 
@@ -21,9 +28,10 @@ HexaPath AI is a real-time, AI-driven career navigation system designed for ente
 ## 🧠 How It Works
 
 1. **Profile Sync**: The user authenticates and completes a digital intake detailing their current skills, industry, and target TSR.
-2. **Analysis Engine**: The FastAPI backend cross-references the user's profile with a vast knowledge base of role requirements to compute precise gap scores.
+2. **Analysis Engine**: The FastAPI backend cross-references the user's profile with a structured role requirement dataset to compute precise gap scores.
 3. **AI Generation**: The OpenRouter AI engine synthesizes the gap data to construct an actionable, timeline-based career development plan.
 4. **Actionable Insights**: The user is presented with curated learning modules and coaching feedback designed specifically to bridge their identified gaps.
+5. **Fallback AI Engine**: Ensures uninterrupted experience by providing high-quality precomputed career paths when AI services are unavailable.
 
 ---
 
@@ -38,19 +46,20 @@ HexaPath AI is a real-time, AI-driven career navigation system designed for ente
 ![FastAPI](https://img.shields.io/badge/FastAPI-005571?style=for-the-badge&logo=fastapi)
 ![Python](https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54)
 
-**Database, Auth & AI:**
+**Database &Auth:**
 ![Supabase](https://img.shields.io/badge/Supabase-3ECF8E?style=for-the-badge&logo=supabase&logoColor=white)
+
+**AI:**
 ![Mistral](https://img.shields.io/badge/Mistral_7B-100000?style=for-the-badge&logo=mistral&logoColor=white)
 
 **Deployment:**
-![Vercel](https://img.shields.io/badge/vercel-%23000000.svg?style=for-the-badge&logo=vercel&logoColor=white)
-![Render](https://img.shields.io/badge/Render-%46E3B7.svg?style=for-the-badge&logo=render&logoColor=white)
+>**- Frontend:**![Vercel](https://img.shields.io/badge/vercel-%23000000.svg?style=for-the-badge&logo=vercel&logoColor=white)
+>**- Backend:**![Render](https://img.shields.io/badge/Render-%46E3B7.svg?style=for-the-badge&logo=render&logoColor=white)
 
 ---
 
 ## 📸 Screenshots
 
-*(Replace placeholders with actual project screenshots)*
 
 > **Dashboard Overview**
 > ![Dashboard Screenshot](assets/dashboard1.png)
@@ -86,7 +95,7 @@ HexapathAI/
 │   │   └── services/        # API and Supabase Client
 │   ├── package.json         # Node Dependencies
 │   └── .env                 # Frontend Secrets
-└── README.md                # You are here!
+└── README.md                # Project Documentation
 ```
 
 ---
@@ -187,4 +196,4 @@ Usually, this consultant would have to navigate dozens of generic online courses
 
 * **ATS Resume Integration**: Automatic skill gap parsing directly from PDF resumes.
 * **LMS Integration**: Direct course linking from enterprise platforms (e.g., Udemy Business, LinkedIn Learning).
-* **Manager Dashboards**: Aggregate team-level upskilling metrics for HR and L&D leaders.
+* **Manager Dashboards Enhancements**: Advanced team-level analytics, multi-user tracking, and enterprise reporting features.
